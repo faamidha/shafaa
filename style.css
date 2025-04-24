@@ -1,0 +1,76 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('https://png.pngtree.com/background/20210717/original/pngtree-abstract-streamline-lines-dark-red-background-picture-image_1433539.jpg'); /* Replace with your actual image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+.form-container {
+  max-width: 500px;
+  background-image: url('https://imgv3.fotor.com/images/share/Free-blue-gradient-pattern-background-from-Fotor.jpg');
+  
+  padding: 30px;
+  margin: 60px auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  border: 1px solid #ddd;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-size: 2rem;
+}
+
+form label {
+  display: block;
+  margin-top: 18px;
+  font-weight: 600;
+  color: #444;
+}
+
+form input,
+form select,
+form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+form input:focus,
+form select:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+form button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  margin-top: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+#responseMessage {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #28a745; /* Success green */
+}
