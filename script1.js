@@ -8,6 +8,8 @@ const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
 
+const cors = require('cors');
+app.use(cors());
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
