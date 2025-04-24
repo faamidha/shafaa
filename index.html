@@ -71,8 +71,8 @@
       event.preventDefault(); // Prevent page reload
       const formData = new FormData(this);
 
-      try {
-        const response = await fetch('/submitPrintOrder', {
+     try {
+        const response = await fetch('https://your-backend-url.onrender.com/submitPrintOrder', {
           method: 'POST',
           body: formData
         });
