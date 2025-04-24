@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
@@ -13,40 +14,41 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
-// MySQL Database connection
+// MySQL Database Connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root', // Replace with your MySQL username
   password: '1234', // Replace with your MySQL password
   database: 'ayesha', // Replace with your database name
 });
-
 db.connect((err) => {
   if (err) {
-    console.error('❌ Error connecting to MySQL:', err);
+    console.error('❌ Database Connection Error:', err);
     return;
   }
-  console.log('✅ Connected to MySQL database.');
+  console.log('✅ Connected to MySQL Database.');
 });
 
-// Nodemailer setup
+// Nodemailer Setup
+
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'shafaaprint219@gmail.com',
-    pass: 'lcqdatdtozwkgnxy', // Replace with a secure app password
+    pass: 'lcqdatdtozwkgnxy', 
   },
 });
 
 transporter.verify((error) => {
   if (error) {
-    console.error('❌ Nodemailer setup error:', error);
+    console.error('❌ Nodemailer Setup Error:', error);
   } else {
-    console.log('✅ Nodemailer is ready to send emails.');
+    console.log('✅ Nodemailer Ready to Send Emails.');
   }
 });
 
-// Multer file storage setup
+// Multer File Upload Setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = path.join(__dirname, 'uploads');
@@ -62,30 +64,31 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Print Order Submission API
 app.post('/submitPrintOrder', upload.fields([
   { name: 'fileUpload' },
   { name: 'paymentProof' }
 ]), (req, res) => {
   const { name, email, department, year, phone, copies, printType, paymentMode, details } = req.body;
 
-  const fileUploadPath = req.files.fileUpload?.[0]?.path || '';
-  const paymentProofPath = req.files.paymentProof?.[0]?.path || '';
+  const fileUploadPath = req.files?.fileUpload?.[0]?.path || '';
+  const paymentProofPath = req.files?.paymentProof?.[0]?.path || '';
 
   const insertQuery = `
-    INSERT INTO print_orders1 
-    (name, email, department, year, phone, copies, print_type, payment_mode, payment_proof_path, detials, file_upload_path) 
+    INSERT INTO print_orders 
+    (name, email, department, year, phone, copies, print_type, payment_mode, payment_proof_path, details, file_upload_path) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(insertQuery, [name, email, department, year, phone, copies, printType, paymentMode, paymentProofPath, details, fileUploadPath], (err) => {
     if (err) {
-      console.error('❌ Database error:', err);
-      return res.status(500).send('Failed to submit print order.');
+      console.error('❌ Database Error:', err);
+      return res.status(500).send('❌ Failed to Submit Print Order.');
     }
 
     const mailOptions = {
-      from: 'shafaaprint219@gmail.com',
-      to: 'shafaaprint219@gmail.com',
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
       subject: '🖨️ New Print Order Received',
       html: `
         <h2>📥 Dear Shafaa Printer, You have a new order!</h2>
@@ -107,17 +110,18 @@ app.post('/submitPrintOrder', upload.fields([
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('❌ Email error:', error);
-        return res.status(500).send('Order saved but email failed.');
+        console.error('❌ Email Error:', error);
+        return res.status(500).send('✅ Order Saved but Email Failed.');
       }
 
-      console.log('✅ Email sent:', info.response);
-      res.send('✅ Print order submitted, connected to database, and email sent successfully!');
+      console.log('✅ Email Sent:', info.response);
+      res.send('✅ Print Order Submitted & Email Sent Successfully!');
     });
   });
 });
 
-const PORT = 3002;
+// Start Server
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
-  console.log(`🚀 Shafaa Prints server running at http://localhost:${PORT}`);
+  console.log(`🚀 Shafaa Prints Server Running at http://localhost:${PORT}`);
 });
